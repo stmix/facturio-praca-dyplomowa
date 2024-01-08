@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------

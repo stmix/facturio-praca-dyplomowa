@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 session_start();
 use Illuminate\Http\Request;
-use DB;
 use App\Http\Requests\InvoiceStoreRequest;
 use Auth;
 use App\Models\Invoice;
 use App\Models\InvoicesProduct;
+use GusApi\Exception\InvalidUserKeyException;
+use GusApi\Exception\NotFoundException;
+use GusApi\GusApi;
+use GusApi\ReportTypes;
+use GusApi\BulkReportTypes;
+use Illuminate\Support\Facades\DB;
 
 class InvoicesController extends Controller
 {
@@ -43,7 +48,7 @@ class InvoicesController extends Controller
             $validated = $request->validated();
 
             $invoice=new Invoice;
-            $invoice->user_id=Auth::id();
+            $invoice->user_id=auth()->id;
 
             $invoice->is_paid=isset($request['ispaid']);
             $invoice->paid_from=$validated["paid_from"];

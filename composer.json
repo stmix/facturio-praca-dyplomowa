@@ -6,10 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "gusapi/gusapi": "^6.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.12",
         "pacerit/laravel-polish-validation-rules": "^5.1",
         "selectpdf/selectpdf-api-client": "^1.4"
     },

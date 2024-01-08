@@ -49,7 +49,7 @@
                                     <b>tel.</b> <?php echo $invoice->seller_phone ?><br />
                                     <b>e-mail:</b> <?php echo $invoice->seller_email ?><br />
                                     </td>
-								
+
 
 								<td>
                                     <b style="font-size: 20px;">Nabywca:</b><br/>
@@ -64,7 +64,7 @@
 						</table>
 					</td>
 				</tr>
-				
+
 
 				<tr class="heading">
 					<td>Adres dostawy</td>
@@ -124,12 +124,12 @@
 		</div>
 	</body>
 </html>
-<?php 
+<?php
     // $url = '.';
     // $localFile = '.';
     // $apiKey = 'a04aca8f-d89c-43f7-acee-4c48329945d2';
     // require('SelectPdf.Api.php');
- 
+
     // $client = new SelectPdf\Api\HtmlToPdfClient($apiKey);
     // $client->setPageSize(SelectPdf\Api\PageSize::A4);
     // $client->convertUrlToFile($url, $localFile);
