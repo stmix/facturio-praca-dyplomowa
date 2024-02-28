@@ -12,6 +12,6 @@
     </head>
     <body onload="/* addProduct(1) */">
     @include('navbar');
-        <livewire:invoice-add/>
+        <livewire:invoice-add />
     </body>
 </html>

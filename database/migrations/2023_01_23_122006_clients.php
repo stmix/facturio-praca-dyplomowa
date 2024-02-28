@@ -19,11 +19,11 @@ return new class extends Migration
             $table->text('client_name');
             $table->text('client_street');
             $table->text('client_city');
-            $table->text('client_email');
+            $table->text('client_email')->nullable();
             $table->text('client_nip');
             $table->text('client_house_number');
             $table->text('client_postcode');
-            $table->text('client_phone');
+            $table->text('client_phone')->nullable();
             $table->timestamps();
         });
     }

@@ -1,4 +1,4 @@
-<?php 
+<?php
     $_SESSION['open']='products';
 ?>
 <!DOCTYPE html>
@@ -18,13 +18,13 @@
         <form method="POST" action=" {{route('products.store')}} " id="invoice_add_form">
             @csrf
             <div id="new_invoice_row">
-                <div style="flex: 4;" class="new_invoice"> 
+                <div style="flex: 4;" class="new_invoice">
                     <header class="new_invoice_header">Produkt</header>
                     <div class="new_invoice_main">
                         <div class="invoice_form_row">
                             <div class="invoice_form_column_in_row" style="flex:1;">
                                 <label class="input_text_label" for="product_name">Nazwa produktu</label><br/>
-                                <input value="{{ old('product_name') }}" name="product_name" class="input_text" id="product_name" type="text" placeholder="Wprowadź nazwę produktu..."/><br/>
+                                <input value="{{ old('product_name') }}" name="product_name" class="input_text" id="product_name" type="text" placeholder="Wprowadź nazwę..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('product_name'))
                                         <span class="alert_form" role="alert">

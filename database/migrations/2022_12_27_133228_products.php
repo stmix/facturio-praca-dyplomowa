@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('product_name');
             $table->double('product_price');
             $table->text('producent');
-            $table->text('product_info');
+            $table->text('product_info')->nullable();
             $table->timestamps();
         });
     }

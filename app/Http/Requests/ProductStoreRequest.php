@@ -25,7 +25,7 @@ class ProductStoreRequest extends FormRequest
     {
         return [
             'product_name' => 'required|min:2|max:255',
-            'product_price' => 'required|numeric|min:3|max:255|',
+            'product_price' => 'required|numeric',
             'producent' => 'required',
             'product_info' => 'sometimes',
         ];
@@ -33,7 +33,7 @@ class ProductStoreRequest extends FormRequest
 
     public function messages() {
         return [
-            
+
         ];
     }
 }

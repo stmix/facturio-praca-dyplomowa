@@ -27,11 +27,11 @@ class ClientStoreRequest extends FormRequest
             'client_name' => 'required|min:3|max:255',
             'client_street' => 'required|min:3|max:255',
             'client_city' => 'required|min:3|max:255',
-            'client_email' => 'required|min:3|max:255|email',
+            'client_email' => 'nullable|min:3|max:255|email',
             'client_nip' => 'required|NIP',
             'client_house_number' => 'required',
             'client_postcode' => 'required',
-            'client_phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
+            'client_phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
         ];
     }
 

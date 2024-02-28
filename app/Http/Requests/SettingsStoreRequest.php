@@ -27,11 +27,11 @@ class SettingsStoreRequest extends FormRequest
             'name' => 'required|min:2|max:255',
             'street' => 'required|min:2|max:255',
             'city' => 'required|min:2|max:255',
-            'email' => 'required|min:2|max:255|email',
+            'email' => 'nullable|min:2|max:255|email',
             'nip' => 'required|NIP',
             'house_number' => 'required',
             'postcode' => 'required',
-            'phone' => 'required',
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
         ];
     }
 

@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->integer('invoice_id');
             $table->text('product_name');
-            $table->integer('number');
+            $table->double('number');
             $table->double('price');
+            $table->double('vat');
             $table->text('discount');
             $table->timestamps();
         });

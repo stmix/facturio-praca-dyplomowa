@@ -1,13 +1,6 @@
 <div class="page" id="new_invoice_page" style="margin-right: 20px;">
     <?php
     $_SESSION['open'] = 'invoices';
-
-    use Illuminate\Support\Facades\DB;
-
-    $userid = auth()->id();
-    $products = DB::select("select * from products where owner_id='$userid'");
-    $clients = DB::select("select * from clients where owner_id='$userid'");
-    $settings = DB::select("select * from settings where id='$userid'");
     ?>
     <form method="POST" action=" {{route('invoices.store')}} " id="invoice_add_form">
         @csrf
@@ -22,7 +15,7 @@
                     </div>
                     <hr>
                     <div class="invoice_date">
-                        <i class="fa fa-calendar"></i><span style="padding-right: 7px">Płatność od:</span>
+                        <i class="fa fa-calendar"></i><span style="padding-right: 7px">Data sprzedaży:</span>
                         <input name="paid_from" type="date" class="product_input" value="<?php
                                                                                             $date = new DateTime();
                                                                                             $date->modify("+1 day");
@@ -32,7 +25,7 @@
                     </div>
                     <hr>
                     <div class="invoice_date">
-                        <i class="fa fa-calendar"></i><span style="padding-right: 7px">Płatność do:</span>
+                        <i class="fa fa-calendar"></i><span style="padding-right: 7px">Termin płatności:</span>
                         <input name="paid_to" type="date" class="product_input" value="<?php
                                                                                         $date = new DateTime();
                                                                                         $date->modify("+14 day");
@@ -42,38 +35,20 @@
                 </div>
             </div>
         </div>
-        <script type='text/javascript'>
-            function importYourData() {
-                try {
-                    document.getElementById('seller_name').value = '<?php echo $settings[0]->name; ?>';
-                    document.getElementById('seller_street').value = '<?php echo $settings[0]->street; ?>';
-                    document.getElementById('seller_city').value = '<?php echo $settings[0]->city; ?>';
-                    document.getElementById('seller_email').value = '<?php echo $settings[0]->email; ?>';
-
-                    document.getElementById('seller_nip').value = '<?php echo $settings[0]->nip; ?>';
-                    document.getElementById('seller_house_number').value = '<?php echo $settings[0]->house_number; ?>';
-                    document.getElementById('seller_postcode').value = '<?php echo $settings[0]->postcode; ?>';
-                    document.getElementById('seller_phone').value = '<?php echo $settings[0]->phone; ?>';
-                } catch (error) {
-                    alert(error);
-                }
-                //document.getElementById('product_name'+ijk).value = document.getElementById('select_product'+ijk).options[document.getElementById('product_name'+ijk).value].text;
-            }
-        </script>
         <div id="new_invoice_row">
             <div style="flex: 4;" class="new_invoice">
                 <header class="new_invoice_header">
                     <div style="display: flex;">
                         <div style="flex: 1;">Sprzedawca</div>
                         <div style="text-align:right; padding-right: 20px;">
-                            <input type="button" onclick="importYourData();" value="Wprowadź dane z ustawień" />
+                            <input wire:click="getSellerDataFromSettings()" type="button" value="Wprowadź dane z ustawień" />
                         </div>
                 </header>
                 <div class="new_invoice_main">
                     <div class="invoice_form_row">
                         <div class="invoice_form_column_in_row" style="flex:1;">
                             <label class="input_text_label" for="fullname">Imię i nazwisko (nazwa)</label><br />
-                            <input wire:model.defer="seller_name" value="{{ old('seller_name') }}" name="seller_name" class="input_text" id="seller_name" type="text" placeholder="Nazwa sprzedawcy..." /><br />
+                            <input wire:model.defer="seller_name" name="seller_name" class="input_text" id="seller_name" type="text" placeholder="Nazwa sprzedawcy..." /><br />
                             <div class="input_separator">
                                 @if ($errors->has('seller_name'))
                                 <span class="alert_form" role="alert">
@@ -158,36 +133,16 @@
                     </div>
                 </div>
             </div>
-            <script type='text/javascript'>
-                function importClient() {
-                    for (let pr = 1; pr < 1000; pr++) {
-                        try {
-                            document.getElementById('buyer_name').value = document.getElementById('select_client_name').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_street').value = document.getElementById('select_client_street').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_city').value = document.getElementById('select_client_city').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_email').value = document.getElementById('select_client_email').options[document.getElementById('select_client_main').value].text;
-
-                            document.getElementById('buyer_nip').value = document.getElementById('select_client_nip').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_house_number').value = document.getElementById('select_client_house_number').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_postcode').value = document.getElementById('select_client_postcode').options[document.getElementById('select_client_main').value].text;
-                            document.getElementById('buyer_phone').value = document.getElementById('select_client_phone').options[document.getElementById('select_client_main').value].text;
-
-                        } catch (error) {}
-                        //document.getElementById('product_name'+ijk).value = document.getElementById('select_product'+ijk).options[document.getElementById('product_name'+ijk).value].text;
-                    }
-                }
-            </script>
             <div style="flex: 4;" class="new_invoice">
                 <header class="new_invoice_header">
                     <div style="display: flex;">
                         <div style="flex: 1;">Nabywca</div>
                         <div style="text-align:right; padding-right: 20px;">
-                            <select id="select_client_main" onchange="importClient();">
+                            <select id="select_client_main" wire:model="clientIndex" wire:change="getBuyerDataFromDatabase()">
                                 <option value="0">Wybierz...</option>
-                                <?php
-                                for ($k = 0; $k < count($clients); $k++) {
-                                    echo '<option value=' . ($k + 1) . '>' . $clients[$k]->client_name . '</option>';
-                                } ?>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">{{ $client->client_name }} </option>
+                                @endforeach
                             </select>
                         </div>
                 </header>
@@ -291,27 +246,31 @@
                         </span>
                     </div>
                     <hr>
-                    <div class="product_header_input" style="flex: 9.7;">
+                    <div class="product_header_input" style="flex: 8;">
                         Nazwa produktu
                     </div>
                     <hr>
-                    <div class="product_header_input" style="flex: 3;">
+                    <div class="product_header_input" style="flex: 4;">
                         Ilość
                     </div>
                     <hr>
-                    <div class="product_header_input" style="flex: 4;">
-                        Cena
+                    <div class="product_header_input" style="flex: 6;">
+                        Cena jedn. netto
                     </div>
                     <hr>
                     <div class="product_header_input" style="flex: 6;">
-                        Stawka VAT
+                        Stawka VAT [%]
                     </div>
                     <hr>
                     <div class="product_header_input" style="flex: 4;">
+                        Rabat [%]
+                    </div>
+                    <hr>
+                    <div class="product_header_input" style="flex: 5;">
                         Wartość netto
                     </div>
                     <hr>
-                    <div class="product_header_input" style="flex: 4;">
+                    <div class="product_header_input" style="flex: 5;">
                         Wartość brutto
                     </div>
                 </div>
@@ -329,117 +288,141 @@
                 if (isset($_SESSION['new_product'])) {
                     $new_product = $_SESSION['new_product'];
                 } ?>
-    <!-- TODO: zrobic zeby lista w petli sie wyswietlala ladnie rekordy do produktow --->
+                <!-- TODO: zrobic zeby lista w petli sie wyswietlala ladnie rekordy do produktow --->
                 <ul id="page_list" class="products_list">
-                    {{ $productsCount }}
-                    @for($i = 0; $i < $productsCount; $i++)
-                    <div id="product_row">
-                        <li id="product_f_copy" class="product_field">
-                            <div class="delete_product" style="flex: 1.3; display: table;">
-                                <div class="for_number" onClick="updateFullpriceSumAfterDelete((this.parentNode.parentNode.id).substring(7)); this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); setIDs();" style="display: table-cell; vertical-align: middle; text-align: center;">
+                    @foreach($productsList as $index => $product)
+                        <div>
+                            <li class="product_field">
+                                <div class="delete_product" style="flex: 1.3; display: table;">
+                                    <div class="for_number" wire:click="deleteProduct({{ $index }})" style="display: table-cell; vertical-align: middle; text-align: center;">
+                                        <span>{{ $loop->index+1 }}</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 8;">
+                                    <input wire:model.defer="productsList.{{$index}}.product_name" list="select_product_new" value="{{old('product_name')}}" name="product_name" type="text" class="product_input" placeholder="Wprowadź nazwę...">
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 4;">
+                                    <div style="margin:auto; {{ $product['number'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productCounterMinus({{ $index }})">
+                                        <span style="{{ $product['number'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined" class="discount_remove">
+                                            remove_circle
+                                        </span>
+                                    </div>
+                                    <input wire:model.defer="productsList.{{$index}}.number" name="product_count" pattern="[0-9]+" type="text" class="product_input" placeholder="X szt." style="text-align: center; padding:0;" wire:change="updateProduct()">
+                                    <div style="margin:auto;" class="discount_add" wire:click="productCounterPlus({{ $index }})">
+                                        <span style="vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined">
+                                            add_circle
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 6;">
+                                    <input wire:model.defer="productsList.{{$index}}.price" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 6;">
+                                    <div style="margin:auto; {{ $product['vat'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productVatMinus({{ $index }})">
+                                        <span style="{{ $product['vat'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined" class="discount_remove">
+                                            remove_circle
+                                        </span>
+                                    </div>
+                                    <input wire:model.defer="productsList.{{$index}}.vat" style="text-align: center; padding: 0;" name="product_vat" type="text" class="product_input" placeholder="Stawka podatku VAT..." style="text-align: center;" wire:change="updateProduct()">
+                                    <div style="margin:auto; {{ $product['vat'] >= 100 ? 'cursor:default;' : '' }}" class="discount_add" wire:click="productVatPlus({{ $index }})">
+                                        <span style="{{ $product['vat'] >= 100 ? 'visibility:hidden;' : '' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined">
+                                            add_circle
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 4;">
+                                    <div style="margin:auto; {{ $product['discount'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productDiscountMinus({{ $index }})">
+                                        <span style="{{ $product['discount'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined" class="discount_remove">
+                                            remove_circle
+                                        </span>
+                                    </div>
+                                    <input wire:model.defer="productsList.{{$index}}.discount" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
+                                    <div style="margin:auto; {{ $product['discount'] < 100 ? '' : 'cursor:default;' }}" class="discount_add" wire:click="productDiscountPlus({{ $index }})">
+                                        <span style="{{ $product['discount'] < 100 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined">
+                                            add_circle
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 5;">
+                                    <input value="{{ number_format(($product['price'] * $product['number']) * ((100 - $product['discount']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_netto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
+                                </div>
+                                <hr>
+                                <div class="product_field_input" style="flex: 5;">
+                                    <input value="{{ number_format(($product['price'] * $product['number'] * ((100 - $product['discount']) / 100)) * ((100 + $product['vat']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_brutto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
+                                </div>
+                            </li>
+                        </div>
 
-                                </div>
-                            </div>
-                            <hr>
-
-                            <script type='text/javascript'>
-                                function importProduct() {
-                                    for (let ijk = 1; ijk < 1000; ijk++) {
-                                        try {
-                                            document.getElementById('product_price' + ijk).value = document.getElementById('select_price' + ijk).options[document.getElementById('product_name' + ijk).value].text;
-                                            document.getElementById('product_name' + ijk).value = document.getElementById('select_product' + ijk).options[document.getElementById('product_name' + ijk).value].text;
-                                        } catch (error) {}
-                                        //document.getElementById('product_name'+ijk).value = document.getElementById('select_product'+ijk).options[document.getElementById('product_name'+ijk).value].text;
-                                    }
-                                }
-                            </script>
-                            <div class="product_field_input" style="flex: 9.7;">
-                                <select style="display: none;" id="select_product" onchange="importProduct();">
-                                    <option value="0">Wybierz...</option>
-                                    <?php
-                                    for ($k = 0; $k < count($products); $k++) {
-                                        echo '<option value=' . ($k + 1) . '>' . $products[$k]->product_name . '</option>';
-                                    } ?>
-                                </select>
-                                <datalist id="select_product_new" onchange="importProduct();">
-                                    <option></option>
-                                    <?php
-                                    for ($k = 0; $k < count($products); $k++) {
-                                        echo '<option value=' . ($k + 1) . '>' . $products[$k]->product_name . '</option>';
-                                    } ?>
-                                </datalist>
-                                <input onchange="importProduct()" list="select_product_new" value="{{old('product_name')}}" name="product_name" type="text" class="product_input" placeholder="Wprowadź nazwę produktu...">
-                            </div>
-                            <hr>
-                            <div class="product_field_input" style="flex: 3;">
-                                <div id="prminus" style="margin:auto" class="discount_remove">
-                                    <span style="vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined" class="discount_remove">
-                                        remove_circle
-                                    </span>
-                                </div>
-                                <input value="0" id="prinput" name="product_count" pattern="[0-9]+" type="text" class="product_input" placeholder="X szt." style="text-align: center; padding:0;">
-                                <div id="prplus" style="margin:auto;" class="discount_add">
-                                    <span style="vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined">
-                                        add_circle
-                                    </span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="product_field_input" style="flex: 4;">
-                                <select style="display: none;" id="select_price" onchange="importProduct()">
-                                    <option value="0"></option>
-                                    <?php
-                                    for ($i = 0; $i < count($products); $i++) {
-                                        echo '<option value=' . ($i + 1) . '>' . $products[$i]->product_price . '</option>';
-                                    } ?>
-                                </select>
-                                <input name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;">
-                            </div>
-                            <hr>
-                            <div class="product_field_input" style="flex: 6;">
-                                <div id="dcminus" style="margin:auto" class="discount_remove">
-                                    <span style="vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined" class="discount_remove">
-                                        remove_circle
-                                    </span>
-                                </div>
-                                <input id="dcinput" style="text-align: center; padding: 0;" value="23%" name="product_vat" type="text" class="product_input" placeholder="Stawka podatku VAT..." style="text-align: center;">
-                                <div id="dcplus" style="margin:auto;" class="discount_add">
-                                    <span style="vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined">
-                                        add_circle
-                                    </span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="product_field_input" style="flex: 4;">
-                                <input value="{{old('product_fullprice')}}" name="product_fullprice" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
-                            </div>
-                            <hr>
-                            <div class="product_field_input" style="flex: 4;">
-                                <input value="{{old('product_fullprice')}}" name="product_fullprice" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
-                            </div>
-                        </li>
+                    @endforeach
+                </ul>
+                <li wire:click="addProduct()" id="product_f_copy" class="product_field" style="border-top: 0; cursor: pointer;">
+                    <div style="flex: 12;" class="product_field_input">
+                        <span style="font-size: 20px; margin: auto;" class="material-symbols-outlined">
+                            add_circle
+                            <span>Dodaj kolejny produkt</span>
+                        </span>
                     </div>
-                @endfor
-            </ul>
-            <li wire:click="addProduct()" onclick="/* addProduct() */" id="product_f_copy" class="product_field" style="border-top: 0; cursor: pointer;">
-                <div style="flex: 6;"></div>
-                <div style="flex: 16;" class="product_field_input">
-                    <span style="font-size: 20px; margin: auto;" class="material-symbols-outlined">
-                        add_circle
-                        <span>Dodaj kolejny produkt</span>
-                    </span>
-                </div>
-                <span style="flex: 2; font-size: 12px; text-align: end;">Wartość faktury:</span>
-                <div class="product_field_input" style="flex: 4;">
-                    <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value=0>
-                </div>
-            </li>
+                </li>
+                <li id="product_f_copy" class="product_field" style="border-top: 0;">
+                    <div style="flex: 14;"></div>
+                    <div>
+                        <div style="display: flex; padding-bottom: 6px;">
+                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Suma rabatów:</span>
+                            <div class="product_field_input" style="flex: 4;">
+                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceDiscountTotal, 2, ',', ' ') . ' zł' }}">
+                            </div>
+                        </div>
+                        <div style="display: flex;">
+                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Suma podatku VAT:</span>
+                            <div class="product_field_input" style="flex: 4;">
+                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceVatTotal, 2, ',', ' ') . ' zł' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; padding-bottom: 6px;">
+                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Wartość faktury netto:</span>
+                            <div class="product_field_input" style="flex: 4;">
+                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceNetto, 2, ',', ' ') . ' zł' }}">
+                            </div>
+                        </div>
+                        <div style="display: flex;">
+                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Wartość faktury brutto:</span>
+                            <div class="product_field_input" style="flex: 4;">
+                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceBrutto, 2, ',', ' ') . ' zł' }}">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </div>
         </div>
-</div>
-
-<div class="new_invoice">
-    <button id="submit_invoice_form" type="submit" class="new_invoice_main">Stwórz fakturę</button>
-</div>
-</form>
-@livewireScripts()
+        <div class="new_invoice" id="page_list_parent">
+            <header class="new_invoice_header">
+                <div class="product_header">
+                    <div class="product_header_input" style="flex: 8;">
+                        Uwagi
+                    </div>
+                </div>
+            </header>
+            <div class="new_invoice_main">
+                <li id="product_f_copy" class="product_field" style="border: 0;">
+                    <div style="width: 80%;">
+                        <div class="product_field_input" style="width: 100%;">
+                            <textarea id="product_fullprice_sum" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
+                        </div>
+                    </div>
+                </li>
+            </div>
+        </div>
+        <div class="new_invoice">
+            <button id="submit_invoice_form" type="submit" class="new_invoice_main">Stwórz fakturę</button>
+        </div>
+    </form>
+    @livewireScripts()
 </div>

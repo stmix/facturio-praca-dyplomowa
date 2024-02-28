@@ -1,7 +1,7 @@
 <?php
     $_SESSION['open']='settings';
     $userid = Auth::id();
-    $settings=(DB::select("select * from settings where id='$userid'"))[0];
+    // $settings=(DB::select("select * from settings where id='$userid'"))[0];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,12 +21,19 @@
             @csrf
             <div id="new_invoice_row">
                 <div style="flex: 4;" class="new_invoice"> 
-                    <header class="new_invoice_header">Twoje dane do faktury</header>
+                    <header class="new_invoice_header">
+                        <div style="margin: 0px 50px; display:flex; justify-content: space-between;" class="flex">
+                            <div>Twoje dane do faktury</div>
+                            <div>
+                                <input type="button" value="Wyszukaj po numerze NIP" onclick="window.location='{{ route('settings.api', ['nip' => '']) }}' + document.getElementById('nip').value" />
+                            </div>
+                        </div>
+                    </header>
                     <div class="new_invoice_main">
                         <div class="invoice_form_row">
                             <div class="invoice_form_column_in_row" style="flex:1;">
                                 <label class="input_text_label" for="fullname">Imię i nazwisko (nazwa)</label><br/>
-                                <input value="<?php echo $settings->name; ?>" name="name" class="input_text" id="fullname" type="text" placeholder="Nazwa..."/><br/>
+                                <input value="{{ $settings->name }}" name="name" class="input_text" id="fullname" type="text" placeholder="Nazwa..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('name'))
                                         <span class="alert_form" role="alert">
@@ -35,7 +42,7 @@
                                         @endif
                                 </div>
                                 <label class="input_text_label" for="street">Ulica</label><br/>
-                                <input value="<?php echo $settings->street; ?>" name="street" class="input_text" id="street" type="text" placeholder="Ulica..."/><br/>
+                                <input value="{{ $settings->street }}" name="street" class="input_text" id="street" type="text" placeholder="Ulica..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('street'))
                                         <span class="alert_form" role="alert">
@@ -44,7 +51,7 @@
                                         @endif
                                     </div>
                                 <label class="input_text_label" for="town">Miasto</label><br/>
-                                <input value="<?php echo $settings->city; ?>" name="city" class="input_text" id="town" type="text" placeholder="Miasto"/>
+                                <input value="{{ $settings->city }}" name="city" class="input_text" id="town" type="text" placeholder="Miasto"/>
                                 <div class="input_separator">
                                         @if ($errors->has('city'))
                                         <span class="alert_form" role="alert">
@@ -53,7 +60,7 @@
                                         @endif
                                 </div>
                                 <label class="input_text_label" for="fullname">E-mail</label><br/>
-                                <input value="<?php echo $settings->email; ?>" name="email" class="input_text" id="fullname" type="text" placeholder="Adres e-mail..."/><br/>
+                                <input value="{{ $settings->email }}" name="email" class="input_text" id="fullname" type="text" placeholder="Adres e-mail..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('email'))
                                         <span class="alert_form" role="alert">
@@ -65,7 +72,7 @@
                             <div style="min-width:5%;"></div>
                             <div class="invoice_form_column_in_row" style="flex:1;">
                                 <label class="input_text_label" for="nip">NIP</label><br/>
-                                <input value="<?php echo $settings->nip; ?>" name="nip" class="input_text" id="phone" type="text" placeholder="NIP..."/><br/>
+                                <input value="{{ $settings->nip }}" name="nip" class="input_text" id="nip" type="text" placeholder="NIP..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('nip'))
                                         <span class="alert_form" role="alert">
@@ -74,7 +81,7 @@
                                         @endif
                                 </div>
                                 <label class="input_text_label" for="number">Numer domu</label><br/>
-                                <input value="<?php echo $settings->house_number; ?>" name="house_number" class="input_text" id="number" type="text" placeholder="Nr domu..."/><br/>
+                                <input value="{{ $settings->house_number }}" name="house_number" class="input_text" id="number" type="text" placeholder="Nr domu..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('house_number'))
                                         <span class="alert_form" role="alert">
@@ -83,7 +90,7 @@
                                         @endif
                                     </div>
                                 <label class="input_text_label" for="zip">Kod pocztowy</label><br/>
-                                <input value="<?php echo $settings->postcode; ?>" name="postcode" class="input_text" id="zip" type="text" placeholder="Kod pocztowy..."/>
+                                <input value="{{ $settings->postcode }}" name="postcode" class="input_text" id="zip" type="text" placeholder="Kod pocztowy..."/>
                                 <div class="input_separator">
                                         @if ($errors->has('postcode'))
                                         <span class="alert_form" role="alert">
@@ -92,7 +99,7 @@
                                         @endif
                                 </div>
                                 <label class="input_text_label" for="phone">Nr telefonu</label><br/>
-                                <input value="<?php echo $settings->phone; ?>" name="phone" class="input_text" id="phone" type="text" placeholder="Nr telefonu..."/><br/>
+                                <input value="{{ $settings->phone }}" name="phone" class="input_text" id="phone" type="text" placeholder="Nr telefonu..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('phone'))
                                         <span class="alert_form" role="alert">

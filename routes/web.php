@@ -45,10 +45,12 @@ Route::get('/products/{id}', [ProductsController::class, 'destroy']);
 
 Route::get('/clients', [ClientsController::class, 'index'])->name('clients');
 Route::get('/clients/add', [ClientsController::class, 'create']);
+Route::get('/clients/add/api', [ClientsController::class, 'dataFromApi'])->name('clients.api');
 Route::post('/clients/save', [ClientsController::class, 'store'])->name('clients.store');
 Route::get('/clients/{id}', [ClientsController::class, 'destroy']);
 
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+Route::get('/settings/api', [SettingsController::class, 'dataFromApi'])->name('settings.api');
 Route::post('/settings/save', [SettingsController::class, 'store'])->name('settings.store');
 
 Auth::routes();
