@@ -1,3 +1,6 @@
+<?php
+    $_SESSION['open'] = 'invoices';
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

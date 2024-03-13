@@ -1,22 +1,20 @@
 <div class="page" id="new_invoice_page" style="margin-right: 20px;">
-    <?php
-    $_SESSION['open'] = 'invoices';
-    ?>
-    <form method="POST" action=" {{route('invoices.store')}} " id="invoice_add_form">
+    <form wire:submit.prevent="createInvoice()" {{-- method="POST" action=" {{route('invoices.store')}} " --}} id="invoice_add_form">
         @csrf
         <h1>Nowa faktura</h1>
+        <h2 style="padding-left:4%; font-weight: 300; font-size:20px;">nr {{ $invoice_num }}</h2>
         <div class="new_invoice">
             <header class="new_invoice_header">Wybierz typ faktury:</header>
             <div class="new_invoice_main">
                 <div class="invoice_type">
                     <div class="invoice_ispaid">
-                        <input name="ispaid" id="ispaid" class="product_input" type="checkbox">
+                        <input name="ispaid" wire:model="is_paid" id="ispaid" class="product_input" type="checkbox">
                         <label id="ispaid_label" for="ispaid"><i class="fa fa-check"></i>Opłacona</label></input>
                     </div>
                     <hr>
                     <div class="invoice_date">
                         <i class="fa fa-calendar"></i><span style="padding-right: 7px">Data sprzedaży:</span>
-                        <input name="paid_from" type="date" class="product_input" value="<?php
+                        <input name="paid_from" wire:model="sale_date" type="date" class="product_input" value="<?php
                                                                                             $date = new DateTime();
                                                                                             $date->modify("+1 day");
                                                                                             $date->modify("-1 day");
@@ -26,7 +24,7 @@
                     <hr>
                     <div class="invoice_date">
                         <i class="fa fa-calendar"></i><span style="padding-right: 7px">Termin płatności:</span>
-                        <input name="paid_to" type="date" class="product_input" value="<?php
+                        <input name="paid_to" wire:model="payment_deadline" type="date" class="product_input" value="<?php
                                                                                         $date = new DateTime();
                                                                                         $date->modify("+14 day");
                                                                                         echo $date->format("Y-m-d");
@@ -50,38 +48,30 @@
                             <label class="input_text_label" for="fullname">Imię i nazwisko (nazwa)</label><br />
                             <input wire:model.defer="seller_name" name="seller_name" class="input_text" id="seller_name" type="text" placeholder="Nazwa sprzedawcy..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('seller_name'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_name') }}
-                                </span>
-                                @endif
+                                @error('seller_name')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="street">Ulica</label><br />
                             <input wire:model.defer="seller_street" value="{{ old('seller_street') }}" name="seller_street" class="input_text" id="seller_street" type="text" placeholder="Nazwa ulicy..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('seller_street'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_street') }}
-                                </span>
-                                @endif
+                                @error('seller_street')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="city">Miasto</label><br />
                             <input wire:model.defer="seller_city" value="{{ old('seller_city') }}" name="seller_city" class="input_text" id="seller_city" type="text" placeholder="Wprowadź nazwę miasta..." />
                             <div class="input_separator">
-                                @if ($errors->has('seller_city'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_city') }}
-                                </span>
-                                @endif
+                                @error('seller_city')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="email">E-mail</label><br />
                             <input wire:model.defer="seller_email" value="{{ old('seller_email') }}" name="seller_email" class="input_text" id="seller_email" type="text" placeholder="Adres e-mail..." />
                             <div class="input_separator">
-                                @if ($errors->has('seller_email'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_email') }}
-                                </span>
-                                @endif
+                                @error('seller_email')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div style="min-width:5%;"></div>
@@ -96,38 +86,30 @@
                             </div>
                             <input wire:model.defer="seller_nip" value="{{ old('seller_nip') }}" name="seller_nip" class="input_text" id="seller_nip" type="text" placeholder="Numer NIP..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('seller_nip'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_nip') }}
-                                </span>
-                                @endif
+                                @error('seller_nip')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="address2">Numer domu </label><br />
                             <input wire:model.defer="seller_house_number" value="{{ old('seller_house_number') }}" name="seller_house_number" class="input_text" id="seller_house_number" type="text" placeholder="Numer domu..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('seller_house_number'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_house_number') }}
-                                </span>
-                                @endif
+                                @error('seller_house_number')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="phone">Kod pocztowy</label><br />
                             <input wire:model.defer="seller_postcode" value="{{ old('seller_postcode') }}" name="seller_postcode" class="input_text" id="seller_postcode" type="text" placeholder="Kod pocztowy..." />
                             <div class="input_separator">
-                                @if ($errors->has('seller_postcode'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_postcode') }}
-                                </span>
-                                @endif
+                                @error('seller_postcode')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="phone">Nr telefonu</label><br />
                             <input wire:model.defer="seller_phone" value="{{ old('seller_phone') }}" name="seller_phone" class="input_text" id="seller_phone" type="text" placeholder="Numer telefonu..." />
                             <div class="input_separator">
-                                @if ($errors->has('seller_phone'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('seller_phone') }}
-                                </span>
-                                @endif
+                                @error('seller_phone')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -152,38 +134,30 @@
                             <label class="input_text_label" for="fullname">Imię i nazwisko (nazwa)</label><br />
                             <input wire:model.defer="buyer_name" value="{{ old('buyer_name') }}" name="buyer_name" class="input_text" id="buyer_name" type="text" placeholder="Nazwa adresata..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_name'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_name') }}
-                                </span>
-                                @endif
+                                @error('buyer_name')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="street">Ulica</label><br />
                             <input wire:model.defer="buyer_street" value="{{ old('buyer_street') }}" name="buyer_street" class="input_text" id="buyer_street" type="text" placeholder="Ulica..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_street'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_street') }}
-                                </span>
-                                @endif
+                                @error('buyer_street')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="town">Miasto</label><br />
                             <input wire:model.defer="buyer_city" value="{{ old('buyer_city') }}" name="buyer_city" class="input_text" id="buyer_city" type="text" placeholder="Miasto" />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_city'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_city') }}
-                                </span>
-                                @endif
+                                @error('buyer_city')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="fullname">E-mail</label><br />
                             <input wire:model.defer="buyer_email" value="{{ old('buyer_email') }}" name="buyer_email" class="input_text" id="buyer_email" type="text" placeholder="Adres e-mail..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_email'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_email') }}
-                                </span>
-                                @endif
+                                @error('buyer_email')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div style="min-width:5%;"></div>
@@ -199,38 +173,30 @@
                             <!-- <label class="input_text_label" for="nip">NIP</label><br/> -->
                             <input wire:model.defer="buyer_nip" value="{{ old('buyer_nip') }}" name="buyer_nip" class="input_text" id="buyer_nip" type="text" placeholder="NIP..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_nip'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_nip') }}
-                                </span>
-                                @endif
+                                @error('buyer_nip')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="number">Numer domu</label><br />
                             <input wire:model.defer="buyer_house_number" value="{{ old('buyer_house_number') }}" name="buyer_house_number" class="input_text" id="buyer_house_number" type="text" placeholder="Nr domu..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_house_number'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_house_number') }}
-                                </span>
-                                @endif
+                                @error('buyer_house_number')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="zip">Kod pocztowy</label><br />
                             <input wire:model.defer="buyer_postcode" value="{{ old('buyer_postcode') }}" name="buyer_postcode" class="input_text" id="buyer_postcode" type="text" placeholder="Kod pocztowy..." />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_postcode'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_postcode') }}
-                                </span>
-                                @endif
+                                @error('buyer_postcode')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label class="input_text_label" for="phone">Nr telefonu</label><br />
                             <input wire:model.defer="buyer_phone" value="{{ old('buyer_phone') }}" name="buyer_phone" class="input_text" id="buyer_phone" type="text" placeholder="Nr telefonu..." /><br />
                             <div class="input_separator">
-                                @if ($errors->has('buyer_phone'))
-                                <span class="alert_form" role="alert">
-                                    {{ $errors->first('buyer_phone') }}
-                                </span>
-                                @endif
+                                @error('buyer_phone')
+                                    <span class="alert_form">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -290,6 +256,18 @@
                 } ?>
                 <!-- TODO: zrobic zeby lista w petli sie wyswietlala ladnie rekordy do produktow --->
                 <ul id="page_list" class="products_list">
+                    <select id="product_select" style="display:none;">
+                        <option value="null">Wybierz...</option>
+                        @foreach($products as $prod)
+                        <option>{{ $prod->product_name }}</option>
+                        @endforeach
+                    </select>
+                    <select id="product_price_select" style="display: none;" style="margin: auto;">
+                        <option value="null">Wybierz...</option>
+                        @foreach($products as $prod)
+                        <option>{{ $prod->product_price }}</option>
+                        @endforeach
+                    </select>
                     @foreach($productsList as $index => $product)
                         <div>
                             <li class="product_field">
@@ -299,8 +277,13 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <datalist id="select_product_new">
+                                    @foreach($products as $prod)
+                                    <option>{{ $prod->product_name }}</option>
+                                    @endforeach
+                                </datalist>
                                 <div class="product_field_input" style="flex: 8;">
-                                    <input wire:model.defer="productsList.{{$index}}.product_name" list="select_product_new" value="{{old('product_name')}}" name="product_name" type="text" class="product_input" placeholder="Wprowadź nazwę...">
+                                    <input id="product_input{{$index}}" wire:model.defer="productsList.{{$index}}.product_name" list="select_product_new" value="{{old('product_name')}}" name="product_name" type="text" class="product_input" placeholder="Wprowadź nazwę...">
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 4;">
@@ -318,7 +301,7 @@
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 6;">
-                                    <input wire:model.defer="productsList.{{$index}}.price" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
+                                    <input id="product_price_input{{$index}}" wire:model.defer="productsList.{{$index}}.price" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 6;">
@@ -358,7 +341,25 @@
                                 </div>
                             </li>
                         </div>
+                        <script>
+                            var productInput = document.getElementById('product_input' + {{ $index }});
+                            var productPriceInput = document.getElementById('product_price_input' + {{ $index }});
 
+                            const productSelect = document.getElementById('product_select');
+                            const productPriceSelect = document.getElementById('product_price_select');
+
+                            productInput.addEventListener('input', () => {
+                                var inputValue = productInput.value;
+                                for (let i = 0; i < productSelect.options.length; i++) {
+                                    if (productSelect.options[i].value === inputValue) {
+                                        const selectedOption = productSelect.options[i];
+                                        // productPriceInput.value = productPriceSelect.options[i].value || ''; // Assuming a "data-price" attribute on options for price
+                                        window.livewire.emit('updateProductPrice', {{ $index }}, productPriceSelect.options[i].value);
+                                        break;
+                                    }
+                                }
+                            });
+                        </script>
                     @endforeach
                 </ul>
                 <li wire:click="addProduct()" id="product_f_copy" class="product_field" style="border-top: 0; cursor: pointer;">
@@ -414,8 +415,11 @@
                 <li id="product_f_copy" class="product_field" style="border: 0;">
                     <div style="width: 80%;">
                         <div class="product_field_input" style="width: 100%;">
-                            <textarea id="product_fullprice_sum" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
+                            <textarea wire:model="note" id="note" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
                         </div>
+                        @error('note')
+                            <span class="alert_form">{{ $message }}</span>
+                        @enderror
                     </div>
                 </li>
             </div>

@@ -3,6 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Client;
+use App\Models\Invoice;
+use App\Models\InvoicesProduct;
+use App\Models\InvoicesProducts;
 use DateTimeImmutable;
 use GusApi\BulkReportTypes;
 use GusApi\Exception\InvalidUserKeyException;
@@ -17,9 +20,45 @@ class InvoiceAdd extends Component
 {
     protected $listeners = [
         'productUpdated' => 'handleProductUpdate',
+        'updateProductPrice' => 'updateProductPrice',
         'deleteProduct'
     ];
+
+    public $rules = [
+            'sale_date' => 'required',
+            'payment_deadline' => 'required',
+
+            'seller_name' => 'required|min:3|max:255',
+            'seller_street' => 'required|min:3|max:255',
+            'seller_city' => 'required|min:3|max:255',
+            'seller_email' => 'nullable|min:3|max:255|email',
+            'seller_nip' => 'required|NIP',
+            'seller_house_number' => 'required',
+            'seller_postcode' => 'required',
+            'seller_phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
+
+            'buyer_name' => 'required|min:3|max:255',
+            'buyer_street' => 'required|min:3|max:255',
+            'buyer_city' => 'required|min:3|max:255',
+            'buyer_email' => 'nullable|min:3|max:255|email',
+            'buyer_nip' => 'required|NIP',
+            'buyer_house_number' => 'required|numeric',
+            'buyer_postcode' => 'required|post_code',
+            'buyer_phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
+
+            'invoiceFullpriceNetto' => 'required',
+
+            'note' => 'nullable|min:3'
+        ];
+
+    public $products;
     public $clients;
+
+    public $invoice_num;
+    public $place;
+    public $is_paid;
+    public $sale_date;
+    public $payment_deadline;
 
     public $seller_name;
     public $seller_nip;
@@ -45,19 +84,34 @@ class InvoiceAdd extends Component
 
     public $invoiceDiscountTotal;
     public $invoiceVatTotal;
+    public $note;
     public $clientIndex;
+    public $productIndex = [];
 
     public function mount()
     {
+        $month = now()->format('m/Y');
+        $lastInvoiceThisMonth = Invoice::where('invoice_num', 'like', "%$month")
+        ->orderBy('invoice_num', 'desc')
+        ->first();
+        if($lastInvoiceThisMonth)
+            $this->invoice_num = str_pad((((int)explode('/', $lastInvoiceThisMonth->invoice_num)[0])+1), 5, '0', STR_PAD_LEFT).date('/m/Y');
+        else
+            $this->invoice_num = '00001'.date('/m/Y');
         $this->productsList = collect([new Product([
             'product_name' => '',
             'number' => 1,
-            'price' => "0.00",
+            'price' => 0,
             'vat' => 23,
             'discount' => 0
         ])]);
-
+        $this->products = Product::where('owner_id', auth()->user()->id)->get();
         $this->clients = Client::where('owner_id', auth()->user()->id)->get();
+
+        $this->is_paid = false;
+        $this->place = "Gdańsk";
+        $this->sale_date = date('Y-m-d');
+        $this->payment_deadline = date('Y-m-d', strtotime('+2 weeks', strtotime($this->sale_date)));
     }
 
     public function getSellerDataFromSettings()
@@ -139,6 +193,25 @@ class InvoiceAdd extends Component
         }
     }
 
+    public function getProductDataFromDatabase($index)
+    {
+        $product = Product::where('id', $this->productIndex[$index])->first();
+
+        $this->productsList[$index] = collect($this->productsList[$index])
+        ->tap(function ($item) use ($product) {
+            if (isset($product)) {
+                $item['product_name'] = $product->product_name;
+                $item['price'] = $product->product_price;
+            }
+            else
+            {
+                $item['product_name'] = "";
+                $item['price'] = 0;
+            }
+        })
+        ->toArray();
+    }
+
     public function getBuyerDataFromApi()
     {
         $this->buyer_nip = json_decode(json_encode($this->buyer_nip),true);
@@ -184,7 +257,7 @@ class InvoiceAdd extends Component
         $product = new Product([
             'product_name' => '',
             'number' => 1,
-            'price' => "0.00",
+            'price' => 0,
             'vat' => 23,
             'discount' => 0
         ]);
@@ -337,6 +410,67 @@ class InvoiceAdd extends Component
     public function deleteProduct($index)
     {
         unset($this->productsList[$index]);
+    }
+
+    public function updateProductPrice($index, $price)
+    {
+        $this->productsList = $this->productsList->map(function ($item, $key) use ($index, $price) {
+            if ($key == $index) {
+                    $item['price'] = $price;
+            }
+            return $item;
+        });
+        $this->updateProduct();
+    }
+
+    public function createInvoice()
+    {
+        // $this->validate();
+
+        $invoice = new Invoice([
+            'user_id' => auth()->user()->id,
+            'invoice_num' => $this->invoice_num,
+            'place' => $this->place,
+            'is_paid' => $this->is_paid,
+            'sale_date' => $this->sale_date,
+            'payment_deadline' => $this->payment_deadline,
+            'seller_name' => $this->seller_name,
+            'seller_street' => $this->seller_street,
+            'seller_city' => $this->seller_city,
+            'seller_email' => $this->seller_email,
+            'seller_nip' => $this->seller_nip,
+            'seller_house_number' => $this->seller_house_number,
+            'seller_postcode' => $this->seller_postcode,
+            'seller_phone' => $this->seller_phone,
+            'buyer_name' => $this->buyer_name,
+            'buyer_street' => $this->buyer_street,
+            'buyer_city' => $this->buyer_city,
+            'buyer_email' => $this->buyer_email,
+            'buyer_nip' => $this->buyer_nip,
+            'buyer_house_number' => $this->buyer_house_number,
+            'buyer_postcode' => $this->buyer_postcode,
+            'buyer_phone' => $this->buyer_phone,
+            'discount_total' => $this->invoiceDiscountTotal,
+            'vat_total' => $this->invoiceVatTotal,
+            'value_netto' => $this->invoiceFullpriceNetto,
+            'note' => $this->note,
+        ]);
+        $invoice->save();
+
+        foreach($this->productsList as $prod)
+        {
+            $product = new InvoicesProduct([
+                'invoice_id' => $invoice->id,
+                'product_name' => $prod['product_name'],
+                'number' => $prod['number'],
+                'price' => $prod['price'],
+                'vat' => $prod['vat'],
+                'discount' => $prod['discount']
+            ]);
+            $product->save();
+        }
+
+        return redirect(route('invoices.index'));
     }
 
     public function render()

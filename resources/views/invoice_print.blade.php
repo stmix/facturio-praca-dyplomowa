@@ -29,7 +29,7 @@
 								<td>
 									Faktura #<?php echo $invoice->id ?><br />
 									Utworzono: <?php echo $invoice->created_at ?><br />
-									Zapłata do: <?php echo $invoice->paid_to ?>
+									Zapłata do: <?php echo $invoice->payment_deadline ?>
 								</td>
 							</tr>
 						</table>
@@ -118,7 +118,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><?php echo number_format($invoice->value, 2, ".", " ") ?> zł</td>
+					<td><?php echo number_format($invoice->value_netto, 2, ".", " ") ?> zł</td>
 				</tr>
 			</table>
 		</div>

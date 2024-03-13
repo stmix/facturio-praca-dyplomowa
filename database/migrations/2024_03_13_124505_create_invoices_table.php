@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->text('invoice_num');
+            $table->text('place');
             $table->boolean('is_paid');
-            $table->date('paid_from');
-            $table->date('paid_to');
+            $table->date('sale_date');
+            $table->date('payment_deadline');
 
             $table->text('seller_name');
             $table->text('seller_street');
@@ -38,7 +40,11 @@ return new class extends Migration
             $table->text('buyer_postcode');
             $table->text('buyer_phone')->nullable();
 
-            $table->double('value');
+            $table->double('discount_total');
+            $table->double('vat_total');
+            $table->double('value_netto');
+
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

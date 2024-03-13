@@ -222,7 +222,7 @@ margin-right: 30px;
 .recent_transactions text{
     font-weight: lighter;
 }
-.transactions_row{
+/* .transactions_row{
     height: 50px;
     width: 90%;
     background-color: rgb(230, 230, 230);
@@ -233,7 +233,7 @@ margin-right: 30px;
     align-items: center;
     justify-content: space-around;
 
-}
+} */
 .company_icon{
 
     background-color: black;
@@ -258,7 +258,7 @@ margin-right: 30px;
     font-size: 18px;
 }
 
-.status_paid{
+/* .status_paid{
     background-color:rgb(128, 215, 128);
     display: flex;
     justify-content: center;
@@ -267,7 +267,7 @@ margin-right: 30px;
     align-items: center;
     border-radius: 30px;
     
-}
+} */
 .status_waiting{
     background-color:rgb(235, 152, 29);
     display: flex;
@@ -313,10 +313,10 @@ margin-right: 30px;
     color: white;
     font-size: 18px;
 }
-.menage_buttons{
+/* .menage_buttons{
     display: flex;
-}
-.info_icon{
+} */
+/* .info_icon{
     background-color: grey;
     border-radius: 100px;
     height: 35px;
@@ -357,7 +357,7 @@ color: white;
 }
 .delete_icon i{
 color: white;
-}
+} */
 @media only screen and (max-width: 600px){
     .side-nav{
         width: 110px;
@@ -409,12 +409,12 @@ color: white;
     .company_date{
         font-size: 12px;
     }
-    .status_paid{
+    /* .status_paid{
         margin-bottom: 5px;
         width: 70px;
         height: 20px;
 
-    }
+    } */
     .status{
         font-size: 14px;
     }
@@ -472,12 +472,12 @@ color: white;
     .company_date{
         font-size: 12px;
     }
-    .status_paid{
+    /* .status_paid{
         margin-bottom: 5px;
         width: 70px;
         height: 20px;
 
-    }
+    } */
     .status{
         font-size: 14px;
     }

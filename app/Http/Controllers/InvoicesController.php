@@ -21,7 +21,8 @@ class InvoicesController extends Controller
     }
 
     public function index() {
-        return view('history');
+        $invoices=Invoice::where('user_id', auth()->user()->id)->get(); //DB::select("select * from invoices where user_id='$userid'");
+        return view('history')->with(['invoices' => $invoices]);
     }
 
     public function create() {
