@@ -9,9 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="invoice_app/css/style.css">
-    <link rel="stylesheet" href="invoice_app/css/style_d.css">
-    @vite('resources/css/app.css')
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
@@ -19,18 +18,8 @@
     <div class="page mr-6">
         <div class="say-hi">
             <div class="history_header">
-        <text> Historia </text>
-   
-        <div class="time_button">
-                <text>
-                    Month
-                </text>
-                <i class="material-symbols-outlined">arrow_drop_down</i>
-
+                <text> Historia </text>
             </div>
-
-        </div>
-
         </div>
         @foreach($invoices as $index => $invoice)
             <div class="m-4">
@@ -40,24 +29,24 @@
                         <i class="material-symbols-outlined">attach_money</i>
                         </div>
                     </div>
-                    <div class="lg:w-[39%] text-center"><text class="company_name text-lg lg:text-base"> {{ $invoice->buyer_name }} </text></div>
-                    <div class="lg:w-[13%] text-center"><text class="company_date"> {{ date("d M Y", strtotime($invoice->sale_date)) }} </text></div>
-                    <div class="lg:w-[13%] text-center"><text class="company_price text-lg lg:text-base"> {{ $invoice->value_netto.' zł' }} </text></div>
+                    <div class="lg:w-[39%] text-center"><text class="text-lg lg:text-base"> {{ $invoice->buyer_name }} </text></div>
+                    <div class="lg:w-[13%] text-center font-thin"><text> {{ date("d M Y", strtotime($invoice->sale_date)) }} </text></div>
+                    <div class="lg:w-[13%] text-center"><text class=" text-lg lg:text-base"> {{ number_format($invoice->value_netto, 2, '.', ' ').' zł' }} </text></div>
                     <div class="lg:w-[9%] flex justify-center px-2 py-1 items-center w-min m-auto rounded-2xl {{ $invoice->is_paid==0 ? 'bg-red-500' : 'bg-green-500' }}">
                         <text class="status"> {{ $invoice->is_paid==0 ? 'Nieopłacona' : 'Opłacona' }} </text>
                     </div>
                     <div class="lg:w-[18%] flex m-auto justify-center p-2">
-                        <div class="mr-2 bg-zinc-400 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center" onclick="showInvoiceDetails({{strval($index)}});">
+                        <div class="cursor-pointer mr-2 bg-zinc-400 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center" onclick="showInvoiceDetails({{strval($index)}});">
                             <i class="material-symbols-outlined text-white">info</i>
                         </div>
-                        <a class="linkwithoutlines mr-2" onclick="return confirm(`Czy na pewno chcesz zmienić status faktury na {{ $invoice->is_paid==0 ? 'opłacony' : 'nieopłacony'}}?`)" href="/invoices/status/'{{$invoice->id}}">
+                        <a class="linkwithoutlines mr-2" onclick="return confirm(`Czy na pewno chcesz zmienić status faktury na {{ $invoice->is_paid==0 ? 'opłacony' : 'nieopłacony'}}?`)" href="/invoices/status/{{$invoice->id}}">
                             <div class="bg-amber-500 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center">
-                                <i class="material-symbols-outlined">edit</i>
+                                <i class="material-symbols-outlined text-white">paid</i>
                             </div>
                         </a>
                         <a class="linkwithoutlines" onclick="return confirm(`Czy na pewno chcesz usunąć fakturę?`)" href="/invoices/delete/{{$invoice->id}}">
                             <div class="bg-red-500 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center">
-                                <i class="material-symbols-outlined">delete</i>
+                                <i class="material-symbols-outlined text-white">delete</i>
                             </div>
                         </a>
                     </div>

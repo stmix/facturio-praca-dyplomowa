@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 <div class="header">
-    <div class="side-nav" style="z-index: 1;">
+    <div class="side-nav border-r border-1 bg-zinc-100" style="z-index: 1;">
         <a href="/" class="logo">
             <text class="inlogo">
                 Factur.io

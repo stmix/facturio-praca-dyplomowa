@@ -10,13 +10,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../invoice_app/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
     @include('navbar');
     <div class="page" >
-        <h1>Ustawienia</h1>
+        <h1 class="text-4xl">Ustawienia</h1>
         <form method="POST" action=" {{route('settings.store')}} " id="invoice_add_form">
             @csrf
             <div id="new_invoice_row">
@@ -25,7 +26,9 @@
                         <div style="margin: 0px 50px; display:flex; justify-content: space-between;" class="flex">
                             <div>Twoje dane do faktury</div>
                             <div>
-                                <input type="button" value="Wyszukaj po numerze NIP" onclick="window.location='{{ route('settings.api', ['nip' => '']) }}' + document.getElementById('nip').value" />
+                                <button type="button" class="hover:bg-white bg-zinc-300 hover:text-zinc-700 font-thin text-black border border-zinc-500 hover:border-transparent rounded text-xs px-1" onclick="window.location='{{ route('settings.api', ['nip' => '']) }}' + document.getElementById('nip').value">
+                                    Wyszukaj po numerze NIP
+                                </button>
                             </div>
                         </div>
                     </header>

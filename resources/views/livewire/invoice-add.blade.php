@@ -1,7 +1,7 @@
 <div class="page" id="new_invoice_page" style="margin-right: 20px;">
     <form wire:submit.prevent="createInvoice()" {{-- method="POST" action=" {{route('invoices.store')}} " --}} id="invoice_add_form">
         @csrf
-        <h1>Nowa faktura</h1>
+        <h1 class="text-4xl">Nowa faktura</h1>
         <h2 style="padding-left:4%; font-weight: 300; font-size:20px;">nr {{ $invoice_num }}</h2>
         <div class="new_invoice">
             <header class="new_invoice_header">Wybierz typ faktury:</header>
@@ -39,7 +39,9 @@
                     <div style="display: flex;">
                         <div style="flex: 1;">Sprzedawca</div>
                         <div style="text-align:right; padding-right: 20px;">
-                            <input wire:click="getSellerDataFromSettings()" type="button" value="Wprowadź dane z ustawień" />
+                            <button type="button" class="hover:bg-white bg-zinc-300 hover:text-zinc-700 font-thin text-black border border-zinc-500 hover:border-transparent rounded text-xs px-1" wire:click="getSellerDataFromSettings()">
+                                Wprowadź dane z ustawień
+                            </button>
                         </div>
                 </header>
                 <div class="new_invoice_main">
@@ -81,7 +83,9 @@
                                     <label class="input_text_label" for="nip">NIP</label>
                                 </div>
                                 <div>
-                                    <input type="button" wire:click="getSellerDataFromApi()" value="Wyszukaj po numerze NIP" />
+                                    <button type="button" class="bg-transparent hover:bg-zinc-100 text-zinc-700 font-thin hover:text-black border border-zinc-500 rounded text-xs px-1" wire:click="getSellerDataFromApi()">
+                                        Wyszukaj po numerze NIP
+                                    </button>
                                 </div>
                             </div>
                             <input wire:model.defer="seller_nip" value="{{ old('seller_nip') }}" name="seller_nip" class="input_text" id="seller_nip" type="text" placeholder="Numer NIP..." /><br />
@@ -119,8 +123,8 @@
                 <header class="new_invoice_header">
                     <div style="display: flex;">
                         <div style="flex: 1;">Nabywca</div>
-                        <div style="text-align:right; padding-right: 20px;">
-                            <select id="select_client_main" wire:model="clientIndex" wire:change="getBuyerDataFromDatabase()">
+                        <div>
+                            <select class="text-sm bg-zinc-200 text-black mr-3" wire:model="clientIndex" wire:change="getBuyerDataFromDatabase()">
                                 <option value="0">Wybierz...</option>
                                 @foreach ($clients as $client)
                                     <option value="{{ $client->id }}">{{ $client->client_name }} </option>
@@ -167,7 +171,9 @@
                                     <label class="input_text_label" for="nip">NIP</label>
                                 </div>
                                 <div>
-                                    <input type="button" wire:click="getBuyerDataFromApi()" value="Wyszukaj po numerze NIP" />
+                                    <button type="button" class="bg-transparent hover:bg-zinc-100 text-zinc-700 font-thin hover:text-black border border-zinc-500 rounded text-xs px-1" wire:click="getBuyerDataFromApi()">
+                                        Wyszukaj po numerze NIP
+                                    </button>
                                 </div>
                             </div>
                             <!-- <label class="input_text_label" for="nip">NIP</label><br/> -->
@@ -415,7 +421,7 @@
                 <li id="product_f_copy" class="product_field" style="border: 0;">
                     <div style="width: 80%;">
                         <div class="product_field_input" style="width: 100%;">
-                            <textarea wire:model="note" id="note" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
+                            <textarea class="rounded-lg border shadow-lg" wire:model="note" id="note" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
                         </div>
                         @error('note')
                             <span class="alert_form">{{ $message }}</span>

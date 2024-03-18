@@ -41,13 +41,17 @@ Route::get('/main', [PageController::class, 'index'])->name('main');
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 Route::get('/products/add', [ProductsController::class, 'create']);
 Route::post('/products/save', [ProductsController::class, 'store'])->name('products.store');
-Route::get('/products/{id}', [ProductsController::class, 'destroy']);
+Route::get('/products/{id}', [ProductsController::class, 'destroy'])->name('products.delete');
+Route::get('/products/{id}/edit', [ProductsController::class, 'edit']);
+Route::put('/products/{id}/update', [ProductsController::class, 'update'])->name('products.update');
 
 Route::get('/clients', [ClientsController::class, 'index'])->name('clients');
 Route::get('/clients/add', [ClientsController::class, 'create']);
 Route::get('/clients/add/api', [ClientsController::class, 'dataFromApi'])->name('clients.api');
 Route::post('/clients/save', [ClientsController::class, 'store'])->name('clients.store');
-Route::get('/clients/{id}', [ClientsController::class, 'destroy']);
+Route::get('/clients/{id}', [ClientsController::class, 'destroy'])->name('clients.delete');
+Route::get('/clients/{id}/edit', [ClientsController::class, 'edit']);
+Route::put('/clients/{id}/update', [ClientsController::class, 'update'])->name('clients.update');
 
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 Route::get('/settings/api', [SettingsController::class, 'dataFromApi'])->name('settings.api');

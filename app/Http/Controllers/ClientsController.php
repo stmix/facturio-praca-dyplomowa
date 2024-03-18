@@ -18,7 +18,8 @@ class ClientsController extends Controller
     }
 
     public function index() {
-        return view('clients');
+        $clients=Client::where('owner_id', auth()->user()->id)->get();
+        return view('clients')->with('clients', $clients);
     }
 
     public function create() {
@@ -41,7 +42,30 @@ class ClientsController extends Controller
         
         $client->save();
 
-        return redirect('/clients')->with('success', 'Klient dodany');
+        return redirect(route('clients'))->with('success', 'Klient dodany');
+    }
+
+    public function edit($id)
+    {
+        $client = Client::find($id);
+        return view('clients_edit')->with('client',$client);
+    }
+
+    public function update(ClientStoreRequest $request)
+    {
+        $validated = $request->validated();
+        $client = Client::find($request->id);
+        $client->client_name=$validated["client_name"];
+        $client->client_street=$validated["client_street"];
+        $client->client_city=$validated["client_city"];
+        $client->client_email=$validated["client_email"];
+        $client->client_nip=$validated["client_nip"];
+        $client->client_house_number=$validated["client_house_number"];
+        $client->client_postcode=$validated["client_postcode"];
+        $client->client_phone=$validated["client_phone"];
+        
+        $client->save();
+        return redirect(route('clients'))->with('success', 'Klient dodany');
     }
 
     public function destroy($id)

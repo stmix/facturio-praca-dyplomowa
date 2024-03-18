@@ -7,12 +7,16 @@ use App\Http\Requests\InvoiceStoreRequest;
 use Auth;
 use App\Models\Invoice;
 use App\Models\InvoicesProduct;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use GusApi\Exception\InvalidUserKeyException;
 use GusApi\Exception\NotFoundException;
 use GusApi\GusApi;
 use GusApi\ReportTypes;
 use GusApi\BulkReportTypes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
+use NumberFormatter;
 
 class InvoicesController extends Controller
 {
@@ -30,7 +34,81 @@ class InvoicesController extends Controller
     }
 
     public function print($id) {
-        return view('invoice_print')->with(['id' => $id]);
+        $invoice=Invoice::where('id', $id)->first();
+        $products=InvoicesProduct::where('invoice_id', $invoice->id)->get();
+
+        $invoiceTaxes = [];
+        foreach($products as $product)
+        {
+            if(isset($invoiceTaxes['all']['netto']))
+            {
+                $invoiceTaxes['all']['netto'] += ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['netto'] = ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            if(isset($invoiceTaxes['all']['vat']))
+            {
+                $invoiceTaxes['all']['vat'] += (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['vat'] = (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            if(isset($invoiceTaxes['all']['brutto']))
+            {
+                $invoiceTaxes['all']['brutto'] += (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['brutto'] = (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+
+            if(isset($invoiceTaxes[$product->vat]['netto']))
+            {
+                $invoiceTaxes[$product->vat]['netto'] += ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['netto'] = ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            if(isset($invoiceTaxes[$product->vat]['vat']))
+            {
+                $invoiceTaxes[$product->vat]['vat'] += (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['vat'] = (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            if(isset($invoiceTaxes[$product->vat]['brutto']))
+            {
+                $invoiceTaxes[$product->vat]['brutto'] += (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['brutto'] = (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+        }
+
+        $formatter = new NumberFormatter('pl_PL', NumberFormatter::SPELLOUT);
+        $zloteSlownie = $formatter->formatCurrency(floor($invoiceTaxes['all']['brutto']), 'PLN');
+
+        $data = [
+            'id' => $id,
+            'invoice' => $invoice,
+            'products' => $products,
+            'invoiceTaxes' => $invoiceTaxes,
+            'zloteSlownie' => $zloteSlownie
+        ];
+
+        $domPdf = new Dompdf();
+
+        $domPdf->loadHtml(View::make('invoice_print', $data)->render());
+        $domPdf->setPaper('A4');
+
+        $domPdf->render();
+        $domPdf->stream('Faktura_'.str_replace('/','-',$invoice->invoice_num).'.pdf');
     }
 
     public function status($id_s) {

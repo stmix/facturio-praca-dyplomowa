@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->text('invoice_num');
-            $table->text('place');
             $table->boolean('is_paid');
             $table->date('sale_date');
             $table->date('payment_deadline');

@@ -425,7 +425,7 @@ class InvoiceAdd extends Component
 
     public function createInvoice()
     {
-        // $this->validate();
+        $this->validate();
 
         $invoice = new Invoice([
             'user_id' => auth()->user()->id,

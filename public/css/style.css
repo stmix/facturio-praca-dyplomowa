@@ -3,7 +3,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-
 }
 
 .page{
@@ -19,7 +18,6 @@
 .history_header{
     display: flex;
     justify-content: space-between;
-
 }
 
 .side-nav{
@@ -40,13 +38,12 @@
 .logo{
     display: block;
     margin-bottom: 130px;
-text-decoration: none;
+    text-decoration: none;
 }
 .menu_items{
-height: 60%;
-justify-content: space-evenly!important;
-align-content: space-between!important;
-
+    height: 60%;
+    justify-content: space-evenly!important;
+    align-content: space-between!important;
 }
 
 .nav-links{
@@ -141,7 +138,7 @@ align-content: space-between!important;
 .say-hi button i {
     padding: 10px;
     font-size: 30px;
-font-weight: lighter;
+    font-weight: lighter;
 }
 
 .say-hi img{
@@ -182,7 +179,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-size: 30px;
     color: white;
     text-align: end;
-margin-right: 30px;
+    margin-right: 30px;
 }
 .containter i {
     color: white;
@@ -195,8 +192,7 @@ margin-right: 30px;
 .containter text{
     color: white;
     display: block;
-    margin-left: 25px;
-    
+    margin-left: 25px;   
 }
 
 .selected {
@@ -222,18 +218,47 @@ margin-right: 30px;
 .recent_transactions text{
     font-weight: lighter;
 }
-/* .transactions_row{
+.transactions_row{
     height: 50px;
     width: 90%;
     background-color: rgb(230, 230, 230);
-    margin: 20px;
+    margin: 0px;
     border-radius: 8px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-around;
+    padding-right: 20px;
+    text-align: center;
+}
 
-} */
+.invoice_details {
+    padding: 30px 40px;
+    background-color:#ddd;
+    border: 1px solid rgb(230, 230, 230);
+    width: 90%;
+    margin: 0px;
+    border-radius: 0px 0px 8px 8px;
+    position: relative;
+}
+
+.invoice_details:before {
+    content: "";
+    position: absolute;
+    top: -30px;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 8px 0 0 #ddd;
+    border-bottom: 1px solid #ccc;
+}
+
+.icon_container {
+    flex:1;
+}
+
 .company_icon{
 
     background-color: black;
@@ -252,13 +277,26 @@ margin-right: 30px;
 }
 .company_name{
     
-    font-weight:bold!important;
-
+    font-weight:bold;
     color: black;
-    font-size: 18px;
+    font-size: 16px;
 }
 
-/* .status_paid{
+.company_date{
+
+    color: black;
+    font-size: 15px;
+}
+
+.company_price{
+    
+    font-weight:bold;
+    color: black;
+    font-size: 16px;
+    text-align: right;
+}
+
+.status_paid{
     background-color:rgb(128, 215, 128);
     display: flex;
     justify-content: center;
@@ -267,7 +305,7 @@ margin-right: 30px;
     align-items: center;
     border-radius: 30px;
     
-} */
+}
 .status_waiting{
     background-color:rgb(235, 152, 29);
     display: flex;
@@ -292,6 +330,27 @@ margin-right: 30px;
     color: white;
 }
 
+.add_button{
+    width: 120px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: black;
+    margin-right: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.add_button text{
+    
+    color: white;
+    font-size: 18px!important;
+}
+.add_button i{
+    
+    color: white;
+    font-size: 18px;
+}
 .time_button{
     width: 120px;
     height: 40px;
@@ -306,17 +365,18 @@ margin-right: 30px;
 .time_button text{
     
     color: white;
-    font-size: 18px;
+    font-size: 18px!important;
 }
 .time_button i{
     
     color: white;
     font-size: 18px;
 }
-/* .menage_buttons{
+.menage_buttons{
     display: flex;
-} */
-/* .info_icon{
+}
+.info_icon{
+    z-index:2;
     background-color: grey;
     border-radius: 100px;
     height: 35px;
@@ -327,8 +387,13 @@ margin-right: 30px;
     justify-content: center;
     align-items: center;
 }
+
+.info_icon:hover {
+    cursor: pointer;
+}
+
 .info_icon i{
-color: white;
+    color: white;
 }
 .edit_icon{
     background-color: orange;
@@ -357,8 +422,444 @@ color: white;
 }
 .delete_icon i{
 color: white;
-} */
+}
+.new_invoice {
+    border-radius: 12px;
+    background-color: #dfdfdf;
+    margin: 10px;
+}
+.new_invoice_header {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 18px;
+}
+.new_invoice_main {
+    border-radius: 12px;
+    background-color: #dfdfdf;
+    padding: 10px;
+}
+#new_invoice_row {
+    display: flex;
+}
+.invoice_form_row {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+.invoice_form_column_in_row {
+    padding: 0px;
+    justify-content: center;
+}
+.input_separator {
+    font-size: 10px;
+    height: 10px;
+    min-width: 130px;
+    width: 100%;
+}
+.input_text {
+    font-size: 13px;
+    border: none;
+    height: 28px;
+    min-width: 130px;
+    width: 100%;
+    padding-left: 7px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px #777;
+}
+.input_text_label {
+    padding-left: 5px;
+    font-size: 11px;
+}
+.product_field {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.product_field_input {
+    display: flex;
+    justify-content: center;
+}
+.product_field input {
+    font-size: 13px;
+    border: none;
+    height: 28px;
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px #777;
+    padding-left: 7px;
+}
+.product_header {
+    display: flex;
+    justify-content: space-around;
+}
+.product_header_input {
+    display: flex;
+    justify-content: center;
+}
+.invoice_type {
+    display: flex;
+    justify-content: center;
+    min-width: 160px;
+}
+.invoice_ispaid {
+    display: flex;
+    flex: 2;
+    justify-content: center;
+    min-width: 160px;
+}
+#ispaid {
+    display: none;
+}
+#ispaid_label {
+    transition: 0.3s;
+    text-align: center;
+}
+#ispaid_label i {
+    padding-right: 10px;
+}
+#ispaid_label:hover {
+    cursor: pointer;
+}
+.invoice_type #ispaid_label {
+    padding: 8px;
+    font-size: 15px;
+    border: none;
+    height: 100%;
+    width: 70%;
+    max-width: 170px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px #777;
+    background-color: #fafafa;
+}
+#ispaid:checked + #ispaid_label {
+    background-color: rgb(128, 215, 128);
+}
+.invoice_type button i {
+    padding-right: 10px;
+}
+.invoice_date {
+    flex: 3;
+    min-width: 230px;
+    display: flex;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: table-cell;
+    text-align: center;
+}
+.invoice_date input {
+    justify-content: center;
+    font-size: 15px;
+    border: none;
+    height: 100%;
+    width: 40%;
+    max-width: 170px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px #777;
+    background-color: #fafafa;
+}
+.invoice_date input:hover {
+    cursor: pointer;
+}
+.invoice_date i {
+    padding-right: 10px;
+}
+#page_list {
+    position: relative;
+}
+.product_field { cursor: move;
+    background-color: #ddd;
+    border-top: 0.5px solid #aaa;
+    border-bottom: 0.5px solid #aaa;
+    position:relative;
+    -moz-transition:border-top-width 0.1s ease-in;
+    -webkit-transition:border-top-width 0.1s ease-in; 
+}
+.product_field:after {
+    background:#bbb;
+    display:block;
+    position:absolute;
+}
+.marker { 
+    opacity:0; 
+}
+.for_number {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.for_number:hover span{
+    display: none;
+}
+
+.for_number:hover:before {
+    content: "X"
+}
+
+#submit_invoice_form {
+    font-size: 20px;
+    width: 100%;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+    border: 0.5px solid #777;
+    transition: 0.1s;
+}
+
+#submit_invoice_form:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+.alert_form {
+    color: red;
+    font-size: 9px;
+    font-weight: 400;
+}
+
+.linkwithoutlines:link {
+    text-decoration: none;
+}
+
+.linkwithoutlines:visited {
+    text-decoration: none;
+}
+
+.linkwithoutlines:hover {
+    text-decoration: none;
+}
+
+.linkwithoutlines:active {
+    text-decoration: none;
+}
+
+.discount_add:hover {
+    cursor: pointer;
+}
+
+.discount_remove:hover {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 900px){
+    .invoice_details {
+        display: none;
+    }
+    .transactions_row{
+        height: auto;
+        width: 90%;
+        padding: 10px 20px;
+    }
+    .new_invoice {
+        border-radius: 12px;
+        background-color: #dfdfdf;
+        margin: 10px;
+    }
+    .new_invoice_header {
+        background-color: #000;
+        color: #fff;
+        padding: 10px;
+        border-radius: 12px;
+        font-size: 18px;
+    }
+    .new_invoice_main {
+        border-radius: 12px;
+        background-color: #dfdfdf;
+        padding: 10px;
+    }
+    #new_invoice_row {
+        display: block;
+    }
+    .invoice_form_row {
+        display: block;
+        justify-content: center;
+        padding: 10px;
+    }
+    .invoice_form_column_in_row {
+        padding: 0px;
+        justify-content: center;
+    }
+    .input_separator {
+        font-size: 10px;
+        height: 10px;
+        min-width: 130px;
+        width: 100%;
+    }
+    .input_text {
+        font-size: 13px;
+        border: none;
+        height: 28px;
+        min-width: 0px;
+        width: 100%;
+        padding-left: 7px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 3px #777;
+    }
+    .input_text_label {
+        padding-left: 5px;
+        font-size: 11px;
+    }
+    .product_field {
+        border: 1px #bbb solid;
+        display: block;
+        justify-content: space-around;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    .product_field_input {
+        display: flex;
+        justify-content: center;
+        padding: 5px 0px;
+    }
+    .product_field input {
+        font-size: 13px;
+        border: none;
+        height: 28px;
+        width: 70%;
+        border-radius: 10px;
+        box-shadow: 0px 0px 3px #777;
+        padding-left: 7px;
+    }
+    .product_header {
+        display: flex;
+        justify-content: space-around;
+    }
+    .product_header_input {
+        display: flex;
+        justify-content: center;
+    }
+    .invoice_type {
+        display: block;
+        justify-content: center;
+        min-width: 160px;
+    }
+    .invoice_ispaid {
+        display: flex;
+        flex: 2;
+        justify-content: center;
+        min-width: 0px;
+        padding-bottom: 10px;
+    }
+    #ispaid {
+        display: none;
+    }
+    #ispaid_label {
+        transition: 0.3s;
+        text-align: center;
+    }
+    #ispaid_label i {
+        padding-right: 10px;
+    }
+    #ispaid_label:hover {
+        cursor: pointer;
+    }
+    .invoice_type #ispaid_label {
+        padding: 8px 14px;
+        font-size: 15px;
+        border: none;
+        height: 100%;
+        width: auto;
+        max-width: 170px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 3px #777;
+        background-color: #fafafa;
+    }
+    #ispaid:checked + #ispaid_label {
+        background-color: rgb(128, 215, 128);
+    }
+    .invoice_type button i {
+        padding-right: 10px;
+    }
+    .invoice_date {
+        flex-direction: column;
+        min-width: 0px;
+        display: flex;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-align: center;
+        align-items: center;
+    }
+    .invoice_date input {
+        font-size: 15px;
+        border: none;
+        height: 100%;
+        width: auto;
+        max-width: 170px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 3px #777;
+        background-color: #fafafa;
+        padding: 5px 10px;
+    }
+    .invoice_date input:hover {
+        cursor: pointer;
+    }
+    .invoice_date i {
+        padding-right: 10px;
+    }
+    .invoice_date span {
+        padding-right: 0px;
+    }
+    #page_list {
+        position: relative;
+    }
+    .product_field { 
+        margin-bottom: 30px;
+        cursor: move;
+        background-color: #ddd;
+        border-top: 0.5px solid #aaa;
+        border-bottom: 0.5px solid #aaa;
+        position:relative;
+        -moz-transition:border-top-width 0.1s ease-in;
+        -webkit-transition:border-top-width 0.1s ease-in; 
+    }
+    .product_field:after {
+        background:#bbb;
+        display:block;
+        position:absolute;
+    }
+    .marker { opacity:0; }
+    .for_number {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    
+    .for_number:hover span{
+        display: none;
+    }
+    
+    .for_number:hover:before {
+        content: "X"
+    }
+    
+    #submit_invoice_form {
+        font-size: 20px;
+        width: 100%;
+        padding: 5px 10px 5px 10px;
+        text-align: center;
+        border: 0.5px solid #777;
+        transition: 0.1s;
+    }
+    
+    #submit_invoice_form:hover {
+        cursor: pointer;
+        background-color: #ccc;
+    }
+
+    .delete_product {
+        background-color: #ccc;
+        border: 1px #777 solid;
+        border-radius: 5px;
+        width: 100%;
+    }
+}
+
 @media only screen and (max-width: 600px){
+    .invoice_details {
+        background-color: green;
+    }
     .side-nav{
         width: 110px;
     }
@@ -409,12 +910,12 @@ color: white;
     .company_date{
         font-size: 12px;
     }
-    /* .status_paid{
+    .status_paid{
         margin-bottom: 5px;
         width: 70px;
         height: 20px;
 
-    } */
+    }
     .status{
         font-size: 14px;
     }
@@ -424,8 +925,10 @@ color: white;
     }
     .value{
         font-size: 16px!important;
-
         margin-right: 50px;
+    }
+
+    .value_money{
     }
     
     .containter i {
@@ -440,7 +943,6 @@ color: white;
         margin-left: 25px;
         font-size: 15px;
     }
-    
 }
 
 
@@ -472,12 +974,12 @@ color: white;
     .company_date{
         font-size: 12px;
     }
-    /* .status_paid{
+    .status_paid{
         margin-bottom: 5px;
         width: 70px;
         height: 20px;
 
-    } */
+    }
     .status{
         font-size: 14px;
     }
@@ -485,6 +987,4 @@ color: white;
         height: 140px;
  width: 230px;
     }
-    
-    
 }
