@@ -96,8 +96,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pt-5">
-                                <a class="linkwithoutlines" href="invoices/print/{{$invoice->id}}" target="_blank">
+                            <div class="pt-5 flex justify-center">
+                                <a class="linkwithoutlines pr-1" href="{{ route('invoices.show', $invoice->id) }}" target="_blank">
+                                    <div class="bg-lime-400 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center" style="margin: auto; vertical-align: middle;">
+                                        <i class="material-symbols-outlined">preview</i>
+                                    </div>
+                                </a>
+                                <a class="linkwithoutlines pl-1" href="{{ route('invoices.download', $invoice->id) }}" target="_blank">
                                     <div class="bg-yellow-400 rounded-full h-[2rem] w-[2rem] self-center flex justify-center items-center" style="margin: auto; vertical-align: middle;">
                                         <i class="material-symbols-outlined">download</i>
                                     </div>

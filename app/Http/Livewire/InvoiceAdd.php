@@ -42,7 +42,7 @@ class InvoiceAdd extends Component
             'buyer_city' => 'required|min:3|max:255',
             'buyer_email' => 'nullable|min:3|max:255|email',
             'buyer_nip' => 'required|NIP',
-            'buyer_house_number' => 'required|numeric',
+            'buyer_house_number' => 'required',
             'buyer_postcode' => 'required|post_code',
             'buyer_phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
 
@@ -335,6 +335,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function productCounterPlus($index)
@@ -349,6 +350,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function productVatMinus($index)
@@ -363,6 +365,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function productVatPlus($index)
@@ -377,6 +380,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function productDiscountMinus($index)
@@ -391,6 +395,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function productDiscountPlus($index)
@@ -405,6 +410,7 @@ class InvoiceAdd extends Component
             }
             return $item;
         });
+        $this->updateProduct();
     }
 
     public function deleteProduct($index)

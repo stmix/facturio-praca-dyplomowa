@@ -10,11 +10,11 @@
 
         </a>
         <ul class="nav-links">
-            <li <?php if($_SESSION['open']=='index') echo 'class="selected"'; ?> ><a href="/main"><i class="material-symbols-outlined">home</i><p>Panel Główny</p></a></li>
-            <li <?php if($_SESSION['open']=='history') echo 'class="selected"'; ?> ><a href="/invoices"> <i class="material-symbols-outlined">history</i><p>Historia</p></a></li>
-            <li <?php if($_SESSION['open']=='products') echo 'class="selected"'; ?> ><a href="/products"> <i class="material-symbols-outlined">inventory_2</i> <p>Produkty</p></a></li>
-            <li <?php if($_SESSION['open']=='clients') echo 'class="selected"'; ?> ><a href="/clients"> <i class="material-symbols-outlined">group</i> <p>Odbiorcy</p></a></li>
-            <li <?php if($_SESSION['open']=='invoices') echo 'class="selected"'; ?> ><a href="/invoices/add"> <i class="material-symbols-outlined">request_page</i><p>Nowa faktura</p></a></li>
+            <li id="home_nav" <?php if($_SESSION['open']=='index') echo 'class="selected"'; ?> ><a href="/main"><i class="material-symbols-outlined">home</i><p>Panel Główny</p></a></li>
+            <li id="history_nav" <?php if($_SESSION['open']=='history') echo 'class="selected"'; ?> ><a href="/invoices"> <i class="material-symbols-outlined">history</i><p>Historia</p></a></li>
+            <li id="products_nav" <?php if($_SESSION['open']=='products') echo 'class="selected"'; ?> ><a href="/products"> <i class="material-symbols-outlined">inventory_2</i> <p>Produkty</p></a></li>
+            <li id="clients_nav" <?php if($_SESSION['open']=='clients') echo 'class="selected"'; ?> ><a href="/clients"> <i class="material-symbols-outlined">group</i> <p>Odbiorcy</p></a></li>
+            <li id="invoice_nav" <?php if($_SESSION['open']=='invoices') echo 'class="selected"'; ?> ><a href="/invoices/add"> <i class="material-symbols-outlined">request_page</i><p>Nowa faktura</p></a></li>
             <div class="active" style="top:<?php 
             if($_SESSION['open']=='index') {
                 echo " 0%;";

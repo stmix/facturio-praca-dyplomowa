@@ -41,7 +41,7 @@ class InvoiceStoreRequest extends FormRequest
             'buyer_city' => 'required|min:3|max:255',
             'buyer_email' => 'required|min:3|max:255|email',
             'buyer_nip' => 'required|NIP',
-            'buyer_house_number' => 'required|numeric',
+            'buyer_house_number' => 'required',
             'buyer_postcode' => 'required|post_code',
             'buyer_phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
 

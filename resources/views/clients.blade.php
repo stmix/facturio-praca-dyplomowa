@@ -20,7 +20,7 @@
             <div class="customers_header">
                 <text> Odbiorcy </text>
                 <a class="linkwithoutlines" href="/clients/add">
-                    <div class="add_button">
+                    <div class="add_button" id="add_client_button">
                         <text>
                             Dodaj
                         </text>
@@ -30,7 +30,7 @@
             </div>
         </div>
         @foreach($clients as $index => $client)
-        <div class="mx-4 mt-4">
+        <div class="client_row mx-4 mt-4">
             <div class="py-3 lg:py-0 lg:flex lg:flex-wrap min-h-14 bg-zinc-200 items-center rounded-lg border border-1 border-zinc-300" {{-- class="transactions_row" --}}>
                 <div class="lg:w-[10%] flex justify-center">
                     <div class="company_icon">

@@ -32,7 +32,8 @@ Route::get('/', function () {
 Route::get('/invoices', [InvoicesController::class, 'index'])->name('invoices.index');
 Route::get('invoices/add', [InvoicesController::class, 'create'])->name('invoices.create');
 Route::post('/invoices/save', [InvoicesController::class, 'store'])->name('invoices.store');
-Route::get('/invoices/print/{id}', [InvoicesController::class, 'print']);
+Route::get('/invoices/{id}', [InvoicesController::class, 'showPdf'])->name('invoices.show');
+Route::get('/invoices/{id}/download', [InvoicesController::class, 'downloadPdf'])->name('invoices.download');
 Route::get('/invoices/delete/{id}', [InvoicesController::class, 'destroy']);
 Route::get('/invoices/status/{id}', [InvoicesController::class, 'status']);
 

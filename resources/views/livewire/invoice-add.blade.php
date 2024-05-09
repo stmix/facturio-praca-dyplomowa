@@ -1,5 +1,5 @@
 <div class="page" id="new_invoice_page" style="margin-right: 20px;">
-    <form wire:submit.prevent="createInvoice()" {{-- method="POST" action=" {{route('invoices.store')}} " --}} id="invoice_add_form">
+    <form wire:submit.prevent="createInvoice()" id="invoice_add_form">
         @csrf
         <h1 class="text-4xl">Nowa faktura</h1>
         <h2 style="padding-left:4%; font-weight: 300; font-size:20px;">nr {{ $invoice_num }}</h2>
@@ -14,7 +14,7 @@
                     <hr>
                     <div class="invoice_date">
                         <i class="fa fa-calendar"></i><span style="padding-right: 7px">Data sprzedaży:</span>
-                        <input name="paid_from" wire:model="sale_date" type="date" class="product_input" value="<?php
+                        <input id="paid_from" name="paid_from" wire:model="sale_date" type="date" class="product_input" value="<?php
                                                                                             $date = new DateTime();
                                                                                             $date->modify("+1 day");
                                                                                             $date->modify("-1 day");
@@ -24,7 +24,7 @@
                     <hr>
                     <div class="invoice_date">
                         <i class="fa fa-calendar"></i><span style="padding-right: 7px">Termin płatności:</span>
-                        <input name="paid_to" wire:model="payment_deadline" type="date" class="product_input" value="<?php
+                        <input id="paid_to" name="paid_to" wire:model="payment_deadline" type="date" class="product_input" value="<?php
                                                                                         $date = new DateTime();
                                                                                         $date->modify("+14 day");
                                                                                         echo $date->format("Y-m-d");
@@ -124,7 +124,7 @@
                     <div style="display: flex;">
                         <div style="flex: 1;">Nabywca</div>
                         <div>
-                            <select class="text-sm bg-zinc-200 text-black mr-3" wire:model="clientIndex" wire:change="getBuyerDataFromDatabase()">
+                            <select id="buyer_select" style="max-width: 200px;" class="px-2 py-1 rounded text-sm bg-zinc-200 text-black mr-3" wire:model="clientIndex" wire:change="getBuyerDataFromDatabase()">
                                 <option value="0">Wybierz...</option>
                                 @foreach ($clients as $client)
                                     <option value="{{ $client->id }}">{{ $client->client_name }} </option>
@@ -293,13 +293,13 @@
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 4;">
-                                    <div style="margin:auto; {{ $product['number'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productCounterMinus({{ $index }})">
+                                    <div id="product_count_minus{{$index}}" style="margin:auto; {{ $product['number'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productCounterMinus({{ $index }})">
                                         <span style="{{ $product['number'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined" class="discount_remove">
                                             remove_circle
                                         </span>
                                     </div>
-                                    <input wire:model.defer="productsList.{{$index}}.number" name="product_count" pattern="[0-9]+" type="text" class="product_input" placeholder="X szt." style="text-align: center; padding:0;" wire:change="updateProduct()">
-                                    <div style="margin:auto;" class="discount_add" wire:click="productCounterPlus({{ $index }})">
+                                    <input id="product_count_input{{$index}}" wire:model.defer="productsList.{{$index}}.number" name="product_count" pattern="[0-9]+" type="text" class="product_input" placeholder="X szt." style="text-align: center; padding:0;" wire:change="updateProduct()">
+                                    <div id="product_count_plus{{$index}}" style="margin:auto;" class="discount_add" wire:click="productCounterPlus({{ $index }})">
                                         <span style="vertical-align: middle; font-size: 16px; margin: auto 5px;" class="material-symbols-outlined">
                                             add_circle
                                         </span>
@@ -311,13 +311,13 @@
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 6;">
-                                    <div style="margin:auto; {{ $product['vat'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productVatMinus({{ $index }})">
+                                    <div id="product_vat_minus{{$index}}" style="margin:auto; {{ $product['vat'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productVatMinus({{ $index }})">
                                         <span style="{{ $product['vat'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined" class="discount_remove">
                                             remove_circle
                                         </span>
                                     </div>
-                                    <input wire:model.defer="productsList.{{$index}}.vat" style="text-align: center; padding: 0;" name="product_vat" type="text" class="product_input" placeholder="Stawka podatku VAT..." style="text-align: center;" wire:change="updateProduct()">
-                                    <div style="margin:auto; {{ $product['vat'] >= 100 ? 'cursor:default;' : '' }}" class="discount_add" wire:click="productVatPlus({{ $index }})">
+                                    <input id="product_vat_input{{$index}}" wire:model.defer="productsList.{{$index}}.vat" style="text-align: center; padding: 0;" name="product_vat" type="text" class="product_input" placeholder="Stawka podatku VAT..." style="text-align: center;" wire:change="updateProduct()">
+                                    <div id="product_vat_plus{{$index}}" style="margin:auto; {{ $product['vat'] >= 100 ? 'cursor:default;' : '' }}" class="discount_add" wire:click="productVatPlus({{ $index }})">
                                         <span style="{{ $product['vat'] >= 100 ? 'visibility:hidden;' : '' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined">
                                             add_circle
                                         </span>
@@ -325,13 +325,13 @@
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 4;">
-                                    <div style="margin:auto; {{ $product['discount'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productDiscountMinus({{ $index }})">
+                                    <div id="product_discount_minus{{$index}}" style="margin:auto; {{ $product['discount'] > 0 ? '' : 'cursor:default;' }}" class="discount_remove" wire:click="productDiscountMinus({{ $index }})">
                                         <span style="{{ $product['discount'] > 0 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined" class="discount_remove">
                                             remove_circle
                                         </span>
                                     </div>
-                                    <input wire:model.defer="productsList.{{$index}}.discount" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
-                                    <div style="margin:auto; {{ $product['discount'] < 100 ? '' : 'cursor:default;' }}" class="discount_add" wire:click="productDiscountPlus({{ $index }})">
+                                    <input id="product_discount_input{{$index}}" wire:model.defer="productsList.{{$index}}.discount" name="product_price" type="text" class="product_input" placeholder="Cena za szt." style="text-align: center; padding: 0;" wire:change="updateProduct()">
+                                    <div id="product_discount_plus{{$index}}" style="margin:auto; {{ $product['discount'] < 100 ? '' : 'cursor:default;' }}" class="discount_add" wire:click="productDiscountPlus({{ $index }})">
                                         <span style="{{ $product['discount'] < 100 ? '' : 'visibility:hidden;' }} vertical-align: middle; font-size: 16px; margin: auto;" class="material-symbols-outlined">
                                             add_circle
                                         </span>
@@ -339,11 +339,11 @@
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 5;">
-                                    <input value="{{ number_format(($product['price'] * $product['number']) * ((100 - $product['discount']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_netto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
+                                    <input id="netto_price_input{{$index}}" value="{{ number_format(($product['price'] * $product['number']) * ((100 - $product['discount']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_netto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
                                 </div>
                                 <hr>
                                 <div class="product_field_input" style="flex: 5;">
-                                    <input value="{{ number_format(($product['price'] * $product['number'] * ((100 - $product['discount']) / 100)) * ((100 + $product['vat']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_brutto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
+                                    <input id="brutto_price_input{{$index}}" value="{{ number_format(($product['price'] * $product['number'] * ((100 - $product['discount']) / 100)) * ((100 + $product['vat']) / 100), 2, ',', ' ') . ' zł' }}" name="product_fullprice_brutto" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly>
                                 </div>
                             </li>
                         </div>
@@ -368,7 +368,7 @@
                         </script>
                     @endforeach
                 </ul>
-                <li wire:click="addProduct()" id="product_f_copy" class="product_field" style="border-top: 0; cursor: pointer;">
+                <li id="add_next_product_button" wire:click="addProduct()" id="product_f_copy" class="product_field" style="border-top: 0; cursor: pointer;">
                     <div style="flex: 12;" class="product_field_input">
                         <span style="font-size: 20px; margin: auto;" class="material-symbols-outlined">
                             add_circle
@@ -380,15 +380,15 @@
                     <div style="flex: 14;"></div>
                     <div>
                         <div style="display: flex; padding-bottom: 6px;">
-                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Suma rabatów:</span>
+                            <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Suma rabatów netto:</span>
                             <div class="product_field_input" style="flex: 4;">
-                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceDiscountTotal, 2, ',', ' ') . ' zł' }}">
+                                <input id="discounts_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceDiscountTotal, 2, ',', ' ') . ' zł' }}">
                             </div>
                         </div>
                         <div style="display: flex;">
                             <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Suma podatku VAT:</span>
                             <div class="product_field_input" style="flex: 4;">
-                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceVatTotal, 2, ',', ' ') . ' zł' }}">
+                                <input id="vat_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceVatTotal, 2, ',', ' ') . ' zł' }}">
                             </div>
                         </div>
                     </div>
@@ -396,13 +396,13 @@
                         <div style="display: flex; padding-bottom: 6px;">
                             <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Wartość faktury netto:</span>
                             <div class="product_field_input" style="flex: 4;">
-                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceNetto, 2, ',', ' ') . ' zł' }}">
+                                <input id="netto_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceNetto, 2, ',', ' ') . ' zł' }}">
                             </div>
                         </div>
                         <div style="display: flex;">
                             <span style="flex: 4; font-size: 12px; text-align: end; margin: auto;">Wartość faktury brutto:</span>
                             <div class="product_field_input" style="flex: 4;">
-                                <input id="product_fullprice_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceBrutto, 2, ',', ' ') . ' zł' }}">
+                                <input id="brutto_sum" name="product_fullprice_sum" type="text" class="product_input" placeholder="-" style="text-align: end; padding-right: 10px;" readonly value="{{ number_format($invoiceFullpriceBrutto, 2, ',', ' ') . ' zł' }}">
                             </div>
                         </div>
                     </div>
@@ -421,7 +421,7 @@
                 <li id="product_f_copy" class="product_field" style="border: 0;">
                     <div style="width: 80%;">
                         <div class="product_field_input" style="width: 100%;">
-                            <textarea class="rounded-lg border shadow-lg" wire:model="note" id="note" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
+                            <textarea id="note" class="rounded-lg border shadow-lg" wire:model="note" name="product_fullprice_sum" style="width: 100%; min-height: 100px; padding: 8px;" type="text" class="product_input" placeholder="Wprowadź uwagi dodatkowe..." value=""></textarea>
                         </div>
                         @error('note')
                             <span class="alert_form">{{ $message }}</span>

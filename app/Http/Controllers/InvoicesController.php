@@ -33,7 +33,88 @@ class InvoicesController extends Controller
         return view('invoice_add');
     }
 
-    public function print($id) {
+    public function showPdf($id) {
+        $invoice=Invoice::where('id', $id)->first();
+        $products=InvoicesProduct::where('invoice_id', $invoice->id)->get();
+
+        $invoiceTaxes = [];
+        foreach($products as $product)
+        {
+            if(isset($invoiceTaxes['all']['netto']))
+            {
+                $invoiceTaxes['all']['netto'] += ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['netto'] = ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            if(isset($invoiceTaxes['all']['vat']))
+            {
+                $invoiceTaxes['all']['vat'] += (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['vat'] = (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            if(isset($invoiceTaxes['all']['brutto']))
+            {
+                $invoiceTaxes['all']['brutto'] += (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes['all']['brutto'] = (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+
+            if(isset($invoiceTaxes[$product->vat]['netto']))
+            {
+                $invoiceTaxes[$product->vat]['netto'] += ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['netto'] = ($product->price * (100 - $product->discount)/100) * $product->number;
+            }
+            if(isset($invoiceTaxes[$product->vat]['vat']))
+            {
+                $invoiceTaxes[$product->vat]['vat'] += (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['vat'] = (($product->price * (100 - $product->discount)/100) * $product->vat/100) * $product->number;
+            }
+            if(isset($invoiceTaxes[$product->vat]['brutto']))
+            {
+                $invoiceTaxes[$product->vat]['brutto'] += (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+            else
+            {
+                $invoiceTaxes[$product->vat]['brutto'] = (($product->price * (100 - $product->discount)/100) + (($product->price * (100 - $product->discount)/100) * $product->vat/100)) * $product->number;
+            }
+        }
+
+        $formatter = new NumberFormatter('pl_PL', NumberFormatter::SPELLOUT);
+        $zloteSlownie = $formatter->formatCurrency(floor($invoiceTaxes['all']['brutto']), 'PLN');
+
+        $data = [
+            'id' => $id,
+            'invoice' => $invoice,
+            'products' => $products,
+            'invoiceTaxes' => $invoiceTaxes,
+            'zloteSlownie' => $zloteSlownie
+        ];
+
+        $domPdf = new Dompdf();
+
+        $domPdf->loadHtml(View::make('invoice_print', $data)->render());
+        $domPdf->setPaper('A4');
+
+        $domPdf->render();
+        $pdfContent = $domPdf->output();
+
+        header('Content-Type: application/pdf');
+        echo $pdfContent;
+    }
+
+    public function downloadPdf($id) {
         $invoice=Invoice::where('id', $id)->first();
         $products=InvoicesProduct::where('invoice_id', $invoice->id)->get();
 

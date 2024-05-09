@@ -106,7 +106,7 @@
                     <form class="login" action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="field">
-                            <input type="text" placeholder="E-mail" name="email" required>
+                            <input id="email_login" type="text" placeholder="E-mail" name="email" required>
                         </div>
                         @error('email')
                             <span class="invalid-feedback" role="alert">
@@ -114,39 +114,39 @@
                             </span>
                         @enderror
                         <div class="field">
-                            <input type="password" placeholder="Hasło" name="password" required>
+                            <input id="password_login" type="password" placeholder="Hasło" name="password" required>
                         </div>
                         <div class="pass-link"><a href="#">Forgot password?</a></div>
                         <div class="field">
-                            <input type="submit" value="Zaloguj się">
+                            <input id="login_button" type="submit" value="Zaloguj się">
                         </div>
                         <div class="signup-link">Nie posiadasz konta? <a href="#">Zarejestruj się!</a></div>
                     </form>
                     <form class="signup" action="{{ route('register') }}" method="POST">
                         @csrf
                         <div class="field">
-                            <input type="text" placeholder="Login" name="name" required>
+                            <input id="name_register" type="text" placeholder="Login" name="name" required>
                             <?php if(isset($_SESSION['e_login'])) {
                                 echo '<div class="error">'.$_SESSION['e_login'].'</div>';
                                 unset($_SESSION['e_login']);
                             } ?>
                         </div>
                         <div class="field">
-                            <input type="text" placeholder="E-mail" name="email" required>
+                            <input id="email_register" type="text" placeholder="E-mail" name="email" required>
                             <?php if(isset($_SESSION['e_email'])) {
                                 echo '<div class="error">'.$_SESSION['e_email'].'</div>';
                                 unset($_SESSION['e_email']);
                             } ?>
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Hasło" name="password" required>
+                            <input id="password_register" type="password" placeholder="Hasło" name="password" required>
                         <?php if(isset($_SESSION['e_password'])) {
                                 echo '<div class="error">'.$_SESSION['e_password'].'</div>';
                                 unset($_SESSION['e_password']);
                             } ?>
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Potwierdź hasło" name="password_confirmation" required>
+                            <input id="password_confirmation_register" type="password" placeholder="Potwierdź hasło" name="password_confirmation" required>
                         </div>
                             <?php if(isset($_SESSION['e_password2'])) {
                                 echo '<div class="error">'.$_SESSION['e_password2'].'</div>';
@@ -163,7 +163,7 @@
                                 unset($_SESSION['e_rules']);
                             } ?>
                         <div class="field">
-                            <input type="submit" name="submit" value="Zarejestruj się">
+                            <input id="register_button" type="submit" name="submit" value="Zarejestruj się">
                         </div>
                     </form>
                 </div>

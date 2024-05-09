@@ -58,7 +58,7 @@
                                         @endif
                                 </div>
                                 <label class="input_text_label" for="fullname">E-mail</label><br/>
-                                <input value="{{ $client->client_email }}" name="client_email" class="input_text" id="fullname" type="text" placeholder="Adres e-mail..."/><br/>
+                                <input value="{{ $client->client_email }}" name="client_email" class="input_text" id="email" type="text" placeholder="Adres e-mail..."/><br/>
                                 <div class="input_separator">
                                         @if ($errors->has('client_email'))
                                         <span class="alert_form" role="alert">
